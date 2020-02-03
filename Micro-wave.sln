@@ -7,17 +7,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "JobSchedulerService", "JobS
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infractructure", "Infractructure", "{DC6E6714-6E56-4B6A-AEB2-6B097A2D17F0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DbAdapters", "DbAdapters", "{1347BCFD-C11E-4D12-A36B-3AD69BD8B64B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Persistence", "Persistence", "{1347BCFD-C11E-4D12-A36B-3AD69BD8B64B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostgreSQLAdapter", "PostgreSQLAdapter\PostgreSQLAdapter.csproj", "{67E8653F-C498-47A4-BA1C-2AE8104FB694}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jobby.Infra.Persistence.EF", "PostgreSQLAdapter\Jobby.Infra.Persistence.EF.csproj", "{67E8653F-C498-47A4-BA1C-2AE8104FB694}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job.Contracts", "Job.Contructs\Job.Contracts.csproj", "{990F72CA-4130-4B93-8408-6B43EFAE4C27}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jobby.Contracts", "Job.Contructs\Jobby.Contracts.csproj", "{990F72CA-4130-4B93-8408-6B43EFAE4C27}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job.Web", "Job.Web\Job.Web.csproj", "{1A64D1FD-4F9F-4774-842A-740B234EE5C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jobby.Web", "Job.Web\Jobby.Web.csproj", "{1A64D1FD-4F9F-4774-842A-740B234EE5C0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job", "Job\Job.csproj", "{EF4577C0-8580-477B-A4FD-21F8745FFBD5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jobby", "Job\Jobby.csproj", "{EF4577C0-8580-477B-A4FD-21F8745FFBD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Job.Domain", "Job.Domain\Job.Domain.csproj", "{349E0D13-1D0E-489E-9DFE-2A73EF050906}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Jobby.Domain", "Job.Domain\Jobby.Domain.csproj", "{349E0D13-1D0E-489E-9DFE-2A73EF050906}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jobby.Utils", "Jobby.Lib\Jobby.Utils.csproj", "{C702636A-5293-4BAA-95EC-B7A61D62A7B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{349E0D13-1D0E-489E-9DFE-2A73EF050906}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{349E0D13-1D0E-489E-9DFE-2A73EF050906}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{349E0D13-1D0E-489E-9DFE-2A73EF050906}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C702636A-5293-4BAA-95EC-B7A61D62A7B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C702636A-5293-4BAA-95EC-B7A61D62A7B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C702636A-5293-4BAA-95EC-B7A61D62A7B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C702636A-5293-4BAA-95EC-B7A61D62A7B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +63,7 @@ Global
 		{1A64D1FD-4F9F-4774-842A-740B234EE5C0} = {C3E0C7BB-8002-49D7-A3B9-210919D9B4A6}
 		{EF4577C0-8580-477B-A4FD-21F8745FFBD5} = {C3E0C7BB-8002-49D7-A3B9-210919D9B4A6}
 		{349E0D13-1D0E-489E-9DFE-2A73EF050906} = {C3E0C7BB-8002-49D7-A3B9-210919D9B4A6}
+		{C702636A-5293-4BAA-95EC-B7A61D62A7B3} = {C3E0C7BB-8002-49D7-A3B9-210919D9B4A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B6E28B0C-1D1F-4306-B7E7-051CF938B158}

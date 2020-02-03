@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace Job.Domain.Models
+namespace Jobby.Domain.Models
 {
-    enum ExecutionStatus
+    public enum ExecutionStatus
     {
         Pending,
         Success,
         Error
     }
 
-    class JobInstance
+    public class JobInstance
     {
         public string Id { get; set; }
         public string JobId { get; set; }
