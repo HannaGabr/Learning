@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Jobby.Infra.Mapping.AutoMap.Profiles;
 using Jobby.Infra.Persistence.EF;
 using Jobby.Repository.Interfaces;
@@ -33,9 +35,15 @@ namespace Jobby
         {
             ConfigureMvc(services);
             ConfigureMapper(services);
+            ConfigureScheduler(services);
             ConfigureDatabase(services);
             ConfigureRepositories(services);
             ConfigureCustomServices(services);
+        }
+
+        private void ConfigureMvc(IServiceCollection services)
+        {
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         public void ConfigureMapper(IServiceCollection services)
@@ -49,9 +57,14 @@ namespace Jobby
             services.AddSingleton(mappingConfig.CreateMapper());
         }
 
-        private void ConfigureMvc(IServiceCollection services)
+        private void ConfigureScheduler(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            //TODO redis
+            services.AddHangfire(configuration => configuration
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseMemoryStorage());
         }
 
         private void ConfigureDatabase(IServiceCollection services)
@@ -77,6 +90,8 @@ namespace Jobby
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseHangfireServer();
+                app.UseHangfireDashboard();
             }
             else
             {
