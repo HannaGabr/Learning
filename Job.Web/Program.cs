@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace blabla
+namespace Jobby
 {
     public class Program
     {
@@ -17,8 +17,22 @@ namespace blabla
             CreateWebHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
-            WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) {
+            var configuration = new ConfigurationBuilder()
+                .AddCommandLine(args)
+                .Build();
+
+            var hostUrl = configuration["hosturl"];
+            if (string.IsNullOrEmpty(hostUrl))
+                hostUrl = "https://0.0.0.0:8000";
+
+            return new WebHostBuilder()
+                .UseKestrel()
+                .UseUrls(hostUrl)
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .UseIISIntegration()
+                .UseStartup<Startup>()
+                .UseConfiguration(configuration);
+        }
     }
 }

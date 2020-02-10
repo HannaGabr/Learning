@@ -5,10 +5,10 @@ namespace Jobby.Infra.Persistence.EF
 {
     public class JobTrackingContext : DbContext
     {
-        public DbSet<Job> Jobs;
-        public DbSet<JobInstance> JobInstances;
+        public DbSet<Job> Jobs { get; set; }
+        public DbSet<JobInstance> JobInstances { get; set; }
 
-        public JobTrackingContext()
+        public JobTrackingContext(DbContextOptions<JobTrackingContext> options): base(options)
         {
             Database.EnsureCreated();
         }
@@ -23,8 +23,8 @@ namespace Jobby.Infra.Persistence.EF
 
             modelBuilder.Entity<JobInstance>()
                 .HasOne<Job>()
-                .WithOne()
-                .HasForeignKey<JobInstance>(j => j.JobId)
+                .WithMany()
+                .HasForeignKey(j => j.JobId)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

@@ -2,16 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Jobby.Infra.Mapping.AutoMap.Profiles;
+using Jobby.Infra.Persistence.EF;
+using Jobby.Repository.Interfaces;
+using Jobby.Services;
+using Jobby.Services.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace blabla
+namespace Jobby
 {
     public class Startup
     {
@@ -22,13 +29,49 @@ namespace blabla
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
+        {
+            ConfigureMvc(services);
+            ConfigureMapper(services);
+            ConfigureDatabase(services);
+            ConfigureRepositories(services);
+            ConfigureCustomServices(services);
+        }
+
+        public void ConfigureMapper(IServiceCollection services)
+        {
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new JobProfile());
+                mc.AddProfile(new JobInstanceProfile());
+            });
+
+            services.AddSingleton(mappingConfig.CreateMapper());
+        }
+
+        private void ConfigureMvc(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        private void ConfigureDatabase(IServiceCollection services)
+        {
+            //TODO postgres
+            services.AddDbContext<JobTrackingContext>(opt => opt.UseInMemoryDatabase(databaseName: "JobTracking"));
+        }
+
+        private void ConfigureRepositories(IServiceCollection services)
+        {
+            services.AddTransient<IJobRepository, JobRepositoryEF>();
+            services.AddTransient<IJobInstanceRepository, JobInstanceRepositoryEF>();
+            services.AddTransient<IUnitOfWork, UnitOfWorkEF>();
+        }
+
+        private void ConfigureCustomServices(IServiceCollection services)
+        {
+            services.AddTransient<IJobService, JobService>();
+        }
+
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

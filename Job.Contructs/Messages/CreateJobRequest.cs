@@ -1,11 +1,12 @@
-﻿namespace Jobby.Domain.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Jobby.Contracts.Messages
 {
-    public class Job
+    public class CreateJobRequest
     {
-        public string Id { get; set; }
         public string Description { get; set; }
+        [EmailAddress]
         public string Email { get; set; }
         public string Cron { get; set; }
-        public bool IsRun { get; set; } = false;
     }
 }

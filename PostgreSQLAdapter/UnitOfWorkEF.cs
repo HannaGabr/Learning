@@ -12,20 +12,29 @@ namespace Jobby.Infra.Persistence.EF
     public class UnitOfWorkEF : IUnitOfWork
     {
         private readonly JobTrackingContext dbContext;
-        public IJobRepository JobRepository { get; }
-        public IJobInstanceRepository JobInstanceRepository { get; }
 
         public UnitOfWorkEF(JobTrackingContext context)
         {
             dbContext = context;
-            JobRepository = new JobRepositoryEF(context);
-            JobInstanceRepository = new JobInstanceRepositoryEF(context);
         }
 
         public async Task<IEnumerable<T>> GetJobsWithLastInstance<T>(Expression<Func<Job, JobInstance, T>> transform)
         {
+            var lastJobInstances = dbContext.JobInstances
+                .GroupBy(
+                    jobInstance => jobInstance.JobId,
+                    (key, group) => group.First(j => j.StartedAt == group.Max(i => i.StartedAt))
+                );
             var jobsWithLastInstance = await dbContext.Jobs
-                .Join(dbContext.JobInstances, Job => Job.Id, JobInstance => JobInstance.JobId, transform)
+                .GroupJoin(
+                    lastJobInstances,
+                    Job => Job.Id,
+                    JobInstance => JobInstance.JobId,
+                    (job, jobInstances) => new { Job = job, JobInstances = jobInstances })
+                .SelectMany(
+                    xy => xy.JobInstances.DefaultIfEmpty(new JobInstance()),
+                    (xy, jobInstance) => transform.Compile()(xy.Job, jobInstance)
+                )
                 .ToListAsync();
 
             return jobsWithLastInstance;

@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Jobby
+namespace Jobby.Services
 {
     // wrap with exeptions and log to understand exp lvl
     public class JobService : IJobService
@@ -35,11 +35,16 @@ namespace Jobby
             return id;
         }
 
-        public async Task<IEnumerable<T>> GetJobsWithInstanceAsync<T>(Expression<Func<Job, JobInstance, T>> transform)
+        public async Task<IEnumerable<T>> GetJobsWithLastInstanceAsync<T>(Expression<Func<Job, JobInstance, T>> transform)
         {
             var jobsWithInstances = await unitOfWork.GetJobsWithLastInstance(transform);
 
             return jobsWithInstances;
+        }
+
+        public async Task<Job> GetJobByIdAsync(string id)
+        {
+            return await jobRepository.GetByIdAsync(id);
         }
 
         public async Task UpdateJobAsync(Job job)

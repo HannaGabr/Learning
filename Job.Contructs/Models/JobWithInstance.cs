@@ -1,11 +1,13 @@
-﻿namespace Jobby.Domain.Models
+﻿using Jobby.Domain.Models;
+
+namespace Jobby.Contracts.Models
 {
-    public class Job
+    public class JobWithInstance
     {
         public string Id { get; set; }
         public string Description { get; set; }
         public string Email { get; set; }
         public string Cron { get; set; }
-        public bool IsRun { get; set; } = false;
+        public ExecutionStatus? LastRunStatus { get; set; }
     }
 }

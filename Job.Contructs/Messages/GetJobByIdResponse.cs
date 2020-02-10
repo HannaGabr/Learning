@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Job.Contracts.Models
+namespace Jobby.Contracts.Messages
 {
-    class GetJobModel
+    public class GetJobByIdResponse
     {
         public int Id { get; set; }
         public string Description { get; set; }
         public string Email { get; set; }
         public string Cron { get; set; }
-        public bool IsRunning { get; set; }
+        public bool IsRun { get; set; }
     }
 }

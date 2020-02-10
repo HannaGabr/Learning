@@ -9,8 +9,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Job.Contructs\Jobby.Contracts.csproj" />
+    <ProjectReference Include="..\Jobby.Infra.Mapping.AutoMapper\Jobby.Infra.Mapping.AutoMap.csproj" />
+    <ProjectReference Include="..\Job\Jobby.csproj" />
+    <ProjectReference Include="..\PostgreSQLAdapter\Jobby.Infra.Persistence.EF.csproj" />
   </ItemGroup>
 
 </Project>
