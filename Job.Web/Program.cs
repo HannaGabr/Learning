@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Serilog;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 
 namespace Jobby
 {
@@ -18,11 +13,12 @@ namespace Jobby
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .ConfigureLogging((context, builder) =>
-                {
-
-                })
-                .UseUrls("https://localhost:8000")
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseSerilog((context, config) => config
+                    .ReadFrom.Configuration(context.Configuration)
+                    .Enrich.FromLogContext()
+                    .WriteTo.Console()
+                    .WriteTo.File(path: context.Configuration["Serilog:FilePath"]))
+                .UseUrls("https://localhost:8000");
     }
 }

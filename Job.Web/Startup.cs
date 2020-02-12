@@ -5,6 +5,7 @@ using Jobby.Repository.Interfaces;
 using Jobby.Services;
 using Jobby.Services.Interfaces;
 using AutoMapper;
+using Serilog;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
@@ -58,6 +59,7 @@ namespace Jobby
                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
+                .UseSerilogLogProvider()
                 .UseMemoryStorage());
 
             services.AddTransient<IScheduler, SchedulerHangfire>();
@@ -87,7 +89,6 @@ namespace Jobby
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseHangfireServer();
                 app.UseHangfireDashboard();
             }
             else
@@ -95,6 +96,8 @@ namespace Jobby
                 app.UseHsts();
             }
 
+            app.UseSerilogRequestLogging();
+            app.UseHangfireServer();
             app.UseHttpsRedirection();
             app.UseMvc();
         }
