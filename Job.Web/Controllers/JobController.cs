@@ -10,16 +10,18 @@ using AutoMapper;
 
 namespace Jobby.Controllers
 {
-    [Route("api/v1/[controller]")] //test crud
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class JobController : ControllerBase
     {
         private readonly IJobService jobService;
+        private readonly IJobTrackingService jobTrackingService;
         private readonly IMapper mapper;
  
-        public JobController(IJobService jobService, IMapper mapper)
+        public JobController(IJobService jobService, IJobTrackingService jobTrackingService, IMapper mapper)
         {
             this.jobService = jobService;
+            this.jobTrackingService = jobTrackingService;
             this.mapper = mapper;
         }
 
@@ -34,10 +36,10 @@ namespace Jobby.Controllers
                     Description = job.Description,
                     Cron = job.Cron,
                     Email = job.Email,
-                    LastRunStatus = jobInstance.Status
+                    LastRunStatus = jobInstance.Status.ToString()
                 };
 
-            var jobsWithInstance = await jobService.GetJobsWithLastInstanceAsync(transformToViewModel);
+            var jobsWithInstance = await jobTrackingService.GetJobsWithLastInstanceAsync(transformToViewModel);
             var result = new GetJobsWithInstanceResponse { JobsWithInstance = jobsWithInstance };
 
             return result;

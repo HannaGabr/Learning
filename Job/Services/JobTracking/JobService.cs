@@ -1,9 +1,6 @@
 ﻿using Jobby.Domain.Models;
 using Jobby.Repository.Interfaces;
 using Jobby.Services.Interfaces;
-using System;
-using System.Linq.Expressions;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Jobby.Services
@@ -13,11 +10,16 @@ namespace Jobby.Services
     {
         private readonly IJobRepository jobRepository;
         private readonly IUnitOfWork unitOfWork;
+        private readonly IScheduler scheduler;
 
-        public JobService(IJobRepository jobRepository, IUnitOfWork unitOfWork)
+        public JobService(
+            IJobRepository jobRepository,
+            IUnitOfWork unitOfWork,
+            IScheduler scheduler)
         {
             this.jobRepository = jobRepository;
             this.unitOfWork = unitOfWork;
+            this.scheduler = scheduler;
         }
 
         public async Task<string> CreateJobAsync(Job job)
@@ -30,16 +32,13 @@ namespace Jobby.Services
 
             await unitOfWork.CompleteAsync();
 
-            //TODO run in scheduler
+            //TODO for once
+            scheduler.ScheduleOrUpdate<IJobTrackingService>(
+                id,
+                (service) => service.Run(id),
+                job.Cron);
             
             return id;
-        }
-
-        public async Task<IEnumerable<T>> GetJobsWithLastInstanceAsync<T>(Expression<Func<Job, JobInstance, T>> transform)
-        {
-            var jobsWithInstances = await unitOfWork.GetJobsWithLastInstance(transform);
-
-            return jobsWithInstances;
         }
 
         public async Task<Job> GetJobByIdAsync(string id)
@@ -55,10 +54,9 @@ namespace Jobby.Services
         public async Task RemoveJobAsync(string jobId)
         {
             await jobRepository.RemoveAsync(jobId);
-
-            //TODO remove from scheduler
-
             await unitOfWork.CompleteAsync();
+
+            scheduler.RemoveIfExists(jobId);
         }
     }
 }

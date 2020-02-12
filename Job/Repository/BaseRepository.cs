@@ -1,6 +1,6 @@
 ﻿namespace Jobby.Repository
 {
-    public class BaseRepository<T>
+    public abstract class BaseRepository<T>
     {
         public string GenerateId(string identifier)
         {

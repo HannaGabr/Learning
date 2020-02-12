@@ -6,7 +6,8 @@ namespace Jobby.Domain.Models
     {
         Pending,
         Success,
-        Error
+        Error,
+        Warning
     }
 
     public class JobInstance
@@ -16,5 +17,19 @@ namespace Jobby.Domain.Models
         public DateTime StartedAt { get; set; }
         public string Error { get; set; }
         public ExecutionStatus Status { get; set; }
+
+        public static JobInstance Create(string id, Job job)
+        {
+            var jobInstance = new JobInstance()
+            {
+                Id = id,
+                JobId = job.Id,
+                StartedAt = DateTime.UtcNow,
+                Error = null,
+                Status = ExecutionStatus.Pending
+            };
+
+            return jobInstance;
+        }
     }
 }

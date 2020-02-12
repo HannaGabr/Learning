@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Job.Domain\Jobby.Domain.csproj" />
+    <ProjectReference Include="..\Jobby.Lib\Jobby.Utils.csproj" />
   </ItemGroup>
 
 </Project>

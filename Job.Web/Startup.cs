@@ -1,24 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Hangfire;
-using Hangfire.MemoryStorage;
-using Jobby.Infra.Mapping.AutoMap.Profiles;
+﻿using Jobby.Infra.Mapping.AutoMap.Profiles;
 using Jobby.Infra.Persistence.EF;
+using Jobby.Infra.Scheduling.HangF;
 using Jobby.Repository.Interfaces;
 using Jobby.Services;
 using Jobby.Services.Interfaces;
+using AutoMapper;
+using Hangfire;
+using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Jobby
 {
@@ -65,6 +59,8 @@ namespace Jobby
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseRecommendedSerializerSettings()
                 .UseMemoryStorage());
+
+            services.AddTransient<IScheduler, SchedulerHangfire>();
         }
 
         private void ConfigureDatabase(IServiceCollection services)
@@ -83,6 +79,7 @@ namespace Jobby
         private void ConfigureCustomServices(IServiceCollection services)
         {
             services.AddTransient<IJobService, JobService>();
+            services.AddTransient<IJobTrackingService, JobTrackingService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
