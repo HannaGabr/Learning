@@ -39,7 +39,7 @@ namespace Jobby.Services
             var job = await jobRepository.GetByIdAsync(jobId);
             if (job == null)
             {
-                scheduler.RemoveIfExists(jobId);
+                scheduler.RemoveScheduleIfExists(jobId);
                 return;
             }
 

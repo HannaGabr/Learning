@@ -56,7 +56,7 @@ namespace Jobby.Services
             await jobRepository.RemoveAsync(jobId);
             await unitOfWork.CompleteAsync();
 
-            scheduler.RemoveIfExists(jobId);
+            scheduler.RemoveScheduleIfExists(jobId);
         }
     }
 }

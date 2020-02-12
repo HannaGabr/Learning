@@ -6,8 +6,7 @@ namespace Jobby.Domain.Models
     {
         Pending,
         Success,
-        Error,
-        Warning
+        Error
     }
 
     public class JobInstance
