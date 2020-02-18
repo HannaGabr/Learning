@@ -16,20 +16,17 @@ namespace Jobby.Services
         private readonly IJobRepository jobRepository;
         private readonly IJobInstanceRepository jobInstanceRepository;
         private readonly IScheduler scheduler;
-        private readonly ILogger logger;
 
         public JobTrackingService(
             IJobRepository jobRepository,
             IJobInstanceRepository jobInstanceRepository,
             IUnitOfWork unitOfWork,
-            IScheduler scheduler,
-            ILogger logger)
+            IScheduler scheduler)
         {
             this.jobRepository = jobRepository;
             this.jobInstanceRepository = jobInstanceRepository;
             this.unitOfWork = unitOfWork;
             this.scheduler = scheduler;
-            this.logger = logger;
         }
 
         public async Task<IEnumerable<T>> GetJobsWithLastInstanceAsync<T>(Expression<Func<Job, JobInstance, T>> transform)
@@ -46,7 +43,7 @@ namespace Jobby.Services
                 var job = await jobRepository.GetByIdAsync(jobId);
                 if (job == null)
                 {
-                    if (!job.IsOnce)
+                    if (job.Type == JobType.Recurrent)
                     {
                         scheduler.RemoveScheduleIfExists(jobId);
                     }
@@ -68,8 +65,6 @@ namespace Jobby.Services
                 {
                     jobInstance.Status = ExecutionStatus.Error;
                     jobInstance.Error = "error";
-
-                    logger.LogError("");
                 } else
                 {
                     jobInstance.Status = ExecutionStatus.Success;
@@ -83,7 +78,6 @@ namespace Jobby.Services
             }
             catch (Exception exp)
             {
-                logger.LogError(exp.Message);
             }
         }
     }

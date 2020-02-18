@@ -34,7 +34,7 @@ namespace Jobby.Services
 
             await unitOfWork.CompleteAsync();
 
-            scheduler.RunOnce<IJobTrackingService>((service) => service.Run(job.Id), job.RunDateTime);
+            scheduler.RunOnce<IJobTrackingService>((service) => service.Run(job.Id), job.RunDateTime.Value);
 
             return id;
         }
