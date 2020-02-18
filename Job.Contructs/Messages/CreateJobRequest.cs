@@ -11,6 +11,5 @@ namespace Jobby.Contracts.Messages
         public string Email { get; set; }
         public string Cron { get; set; }
         public DateTimeOffset RunDateTime { get; set; }
-        public JobType Type { get; set; }
     }
 }
