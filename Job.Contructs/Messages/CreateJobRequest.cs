@@ -10,6 +10,6 @@ namespace Jobby.Contracts.Messages
         [EmailAddress]
         public string Email { get; set; }
         public string Cron { get; set; }
-        public DateTimeOffset RunDateTime { get; set; }
+        public DateTimeOffset? RunDateTime { get; set; }
     }
 }

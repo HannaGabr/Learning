@@ -14,7 +14,7 @@ namespace Jobby.Domain.Models
         public string Description { get; set; }
         public string Email { get; set; }
         public string Cron { get; set; }
-        public DateTimeOffset RunDateTime { get; set; }
+        public DateTimeOffset? RunDateTime { get; set; }
         public JobType Type { get; set; }
         public bool IsRun { get; set; } = false;
     }
