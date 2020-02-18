@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Jobby.Domain.Models;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Jobby.Contracts.Messages
 {
@@ -8,5 +10,7 @@ namespace Jobby.Contracts.Messages
         [EmailAddress]
         public string Email { get; set; }
         public string Cron { get; set; }
+        public DateTimeOffset RunDateTime { get; set; }
+        public JobType Type { get; set; }
     }
 }

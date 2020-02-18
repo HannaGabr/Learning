@@ -12,9 +12,9 @@ namespace Jobby.Infra.Scheduling.HangF
             RecurringJob.AddOrUpdate(id, e, cron);
         }
 
-        public void RunOnce<T>(Expression<Action<T>> e, TimeSpan delay)
+        public void RunOnce<T>(Expression<Action<T>> e, DateTimeOffset at)
         {
-            BackgroundJob.Schedule(e, delay);
+            BackgroundJob.Schedule(e, at);
         }
 
         public void RemoveScheduleIfExists(string id)

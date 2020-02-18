@@ -60,20 +60,36 @@ namespace Jobby.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CreateJobResponse>> PostAsync([FromBody] CreateJobRequest createJobRequest)
+        [Route("CreateRecurrentJob")]
+        public async Task<ActionResult<CreateJobResponse>> CreateRecurrentJobAsync([FromBody] CreateJobRequest createJobRequest)
         {
-            var job = mapper.Map<Job>(createJobRequest);
-            string jobId = await jobService.CreateJobAsync(job);
+            var job = mapper.Map<Job>(createJobRequest); //map to app models
+            string jobId = await jobService.CreateRecurrentJobAsync(job);
 
             var response = new CreateJobResponse() { JobId = jobId };
 
             return Created($"/job/{jobId}", response);
         }
 
-        /*[HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPost]
+        [Route("CreateRunOnceJob")]
+        public async Task<ActionResult<CreateJobResponse>> CreateRunOnceJobAsync([FromBody] CreateJobRequest createJobRequest)
         {
-        }*/
+            var job = mapper.Map<Job>(createJobRequest); //map to app models
+            string jobId = await jobService.CreateRunOnceJobAsync(job);
+
+            var response = new CreateJobResponse() { JobId = jobId };
+
+            return Created($"/job/{jobId}", response);
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult Put(int id, [FromBody] string value)
+        {
+            Response.Headers.Add("Allow", "GET, POST, DELETE");
+
+            return new StatusCodeResult(405);
+        }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteAsync(string id)

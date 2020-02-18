@@ -1,6 +1,7 @@
 ﻿using Jobby.Domain.Models;
 using Jobby.Repository.Interfaces;
 using Jobby.Services.Interfaces;
+using System;
 using System.Threading.Tasks;
 
 namespace Jobby.Services
@@ -22,22 +23,38 @@ namespace Jobby.Services
             this.scheduler = scheduler;
         }
 
-        public async Task<string> CreateJobAsync(Job job)
+        public async Task<string> CreateRunOnceJobAsync(Job job) // change to app model, add mapping
         {
-            //TODO param validation, accepts crone
+            //TODO param validation, accepts dateTime in future
 
             string id = jobRepository.NextIdentity();
             job.Id = id;
+            job.Type = JobType.RunOnce;
             jobRepository.Add(job);
 
             await unitOfWork.CompleteAsync();
 
-            //TODO for once
+            scheduler.RunOnce<IJobTrackingService>((service) => service.Run(job.Id), job.RunDateTime);
+
+            return id;
+        }
+
+        public async Task<string> CreateRecurrentJobAsync(Job job) //change to app model, add mapping
+        {
+            //TODO param validation, accepts valid crone
+
+            string id = jobRepository.NextIdentity();
+            job.Id = id;
+            job.Type = JobType.Recurrent;
+            jobRepository.Add(job);
+
+            await unitOfWork.CompleteAsync();
+
             scheduler.ScheduleOrUpdate<IJobTrackingService>(
-                id,
-                (service) => service.Run(id),
+                job.Id,
+                (service) => service.Run(job.Id),
                 job.Cron);
-            
+
             return id;
         }
 
@@ -53,10 +70,14 @@ namespace Jobby.Services
 
         public async Task RemoveJobAsync(string jobId)
         {
+            var job = await jobRepository.GetByIdAsync(jobId);
             await jobRepository.RemoveAsync(jobId);
             await unitOfWork.CompleteAsync();
 
-            scheduler.RemoveScheduleIfExists(jobId);
+            if (job.Type == JobType.Recurrent)
+            {
+                scheduler.RemoveScheduleIfExists(jobId);
+            }
         }
     }
 }
