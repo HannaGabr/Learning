@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Job.Contructs\Jobby.Contracts.csproj" />
-    <ProjectReference Include="..\Jobby.Infra.Mapping.AutoMapper\Jobby.Infra.Mapping.AutoMap.csproj" />
     <ProjectReference Include="..\Jobby.Infra.Scheduling.Hangfire\Jobby.Infra.Scheduling.HangF.csproj" />
     <ProjectReference Include="..\Job\Jobby.csproj" />
     <ProjectReference Include="..\PostgreSQLAdapter\Jobby.Infra.Persistence.EF.csproj" />

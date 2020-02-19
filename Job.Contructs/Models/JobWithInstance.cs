@@ -1,4 +1,5 @@
 ﻿using Jobby.Domain.Models;
+using System;
 
 namespace Jobby.Contracts.Models
 {
@@ -8,6 +9,8 @@ namespace Jobby.Contracts.Models
         public string Description { get; set; }
         public string Email { get; set; }
         public string Cron { get; set; }
-        public string LastRunStatus { get; set; }
+        public DateTimeOffset? RunDateTime { get; set; }
+        public JobType Type { get; set; }
+        public RunStatus LastRunStatus { get; set; }
     }
 }

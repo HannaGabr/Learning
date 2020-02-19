@@ -1,15 +1,16 @@
 ﻿using Jobby.Contracts.Messages;
-using Jobby.Contracts.Models;
 using Jobby.Domain.Models;
 using AutoMapper;
+using Jobby.Services.JobTracking.Models;
 
-namespace Jobby.Infra.Mapping.AutoMap.Profiles
+namespace Jobby.Mapping.Profiles
 {
     public class JobProfile : Profile
     {
         public JobProfile()
         {
-            CreateMap<CreateJobRequest, Job>();
+            CreateMap<CreateRunOnceJobRequest, CreateRunOnceJobAppModel>();
+            CreateMap<CreateRecurringJobRequest, CreateRecurringJobAppModel>();
             CreateMap<Job, GetJobByIdResponse>();
         }
     }

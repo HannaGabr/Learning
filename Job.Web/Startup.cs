@@ -1,9 +1,10 @@
-﻿using Jobby.Infra.Mapping.AutoMap.Profiles;
-using Jobby.Infra.Persistence.EF;
+﻿using Jobby.Infra.Persistence.EF;
 using Jobby.Infra.Scheduling.HangF;
 using Jobby.Repository.Interfaces;
 using Jobby.Services;
 using Jobby.Services.Interfaces;
+using JobAppProfile = Jobby.Services.JobTracking.Mapping.Profiles.JobProfile;
+using JobViewProfile = Jobby.Mapping.Profiles.JobProfile;
 using AutoMapper;
 using Serilog;
 using Hangfire;
@@ -38,15 +39,20 @@ namespace Jobby
 
         private void ConfigureMvc(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(options =>
+                {
+                    options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                });
         }
 
         public void ConfigureMapper(IServiceCollection services)
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new JobProfile());
-                mc.AddProfile(new JobInstanceProfile());
+                mc.AddProfile(new JobAppProfile());
+                mc.AddProfile(new JobViewProfile());
             });
 
             services.AddSingleton(mappingConfig.CreateMapper());

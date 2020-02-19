@@ -1,10 +1,8 @@
 ﻿using Jobby.Domain.Models;
 using Jobby.Repository.Interfaces;
 using Jobby.Services.Interfaces;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -43,7 +41,7 @@ namespace Jobby.Services
                 var job = await jobRepository.GetByIdAsync(jobId);
                 if (job == null)
                 {
-                    if (job.Type == JobType.Recurrent)
+                    if (job.Type == JobType.Recurring)
                     {
                         scheduler.RemoveScheduleIfExists(jobId);
                     }
@@ -63,11 +61,11 @@ namespace Jobby.Services
                 //TODO Send
                 if (false)
                 {
-                    jobInstance.Status = ExecutionStatus.Error;
+                    jobInstance.Status = RunStatus.Error;
                     jobInstance.Error = "error";
                 } else
                 {
-                    jobInstance.Status = ExecutionStatus.Success;
+                    jobInstance.Status = RunStatus.Success;
                 }
                 jobInstanceRepository.Update(jobInstance);
 

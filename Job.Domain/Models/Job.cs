@@ -4,7 +4,7 @@ namespace Jobby.Domain.Models
 {
     public enum JobType
     {
-        Recurrent,
+        Recurring,
         RunOnce
     }
 

@@ -2,7 +2,7 @@
 
 namespace Jobby.Domain.Models
 {
-    public enum ExecutionStatus
+    public enum RunStatus
     {
         Pending,
         Success,
@@ -15,7 +15,7 @@ namespace Jobby.Domain.Models
         public string JobId { get; set; }
         public DateTime StartedAt { get; set; }
         public string Error { get; set; }
-        public ExecutionStatus Status { get; set; }
+        public RunStatus Status { get; set; }
 
         public static JobInstance Create(string id, Job job)
         {
@@ -25,7 +25,7 @@ namespace Jobby.Domain.Models
                 JobId = job.Id,
                 StartedAt = DateTime.UtcNow,
                 Error = null,
-                Status = ExecutionStatus.Pending
+                Status = RunStatus.Pending
             };
 
             return jobInstance;

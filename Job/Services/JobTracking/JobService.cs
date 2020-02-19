@@ -1,6 +1,8 @@
 ﻿using Jobby.Domain.Models;
 using Jobby.Repository.Interfaces;
 using Jobby.Services.Interfaces;
+using Jobby.Services.JobTracking.Models;
+using AutoMapper;
 using System;
 using System.Threading.Tasks;
 
@@ -12,26 +14,30 @@ namespace Jobby.Services
         private readonly IJobRepository jobRepository;
         private readonly IUnitOfWork unitOfWork;
         private readonly IScheduler scheduler;
+        private readonly IMapper mapper;
 
         public JobService(
             IJobRepository jobRepository,
             IUnitOfWork unitOfWork,
-            IScheduler scheduler)
+            IScheduler scheduler,
+            IMapper mapper)
         {
             this.jobRepository = jobRepository;
             this.unitOfWork = unitOfWork;
             this.scheduler = scheduler;
+            this.mapper = mapper;
         }
 
-        public async Task<string> CreateRunOnceJobAsync(Job job) // change to app model, add mapping
+        public async Task<string> CreateRunOnceJobAsync(CreateRunOnceJobAppModel createJobModel)
         {
             //TODO param validation, accepts dateTime in future
 
+            var job = mapper.Map<Job>(createJobModel);
             string id = jobRepository.NextIdentity();
             job.Id = id;
             job.Type = JobType.RunOnce;
-            jobRepository.Add(job);
 
+            jobRepository.Add(job);
             await unitOfWork.CompleteAsync();
 
             scheduler.RunOnce<IJobTrackingService>((service) => service.Run(job.Id), job.RunDateTime.Value);
@@ -39,15 +45,16 @@ namespace Jobby.Services
             return id;
         }
 
-        public async Task<string> CreateRecurrentJobAsync(Job job) //change to app model, add mapping
+        public async Task<string> CreateRecurringJobAsync(CreateRecurringJobAppModel createJobModel)
         {
             //TODO param validation, accepts valid crone
 
+            var job = mapper.Map<Job>(createJobModel);
             string id = jobRepository.NextIdentity();
             job.Id = id;
-            job.Type = JobType.Recurrent;
-            jobRepository.Add(job);
+            job.Type = JobType.Recurring;
 
+            jobRepository.Add(job);
             await unitOfWork.CompleteAsync();
 
             scheduler.ScheduleOrUpdate<IJobTrackingService>(
@@ -74,7 +81,7 @@ namespace Jobby.Services
             await jobRepository.RemoveAsync(jobId);
             await unitOfWork.CompleteAsync();
 
-            if (job.Type == JobType.Recurrent)
+            if (job.Type == JobType.Recurring)
             {
                 scheduler.RemoveScheduleIfExists(jobId);
             }

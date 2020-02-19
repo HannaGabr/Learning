@@ -7,6 +7,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
+using Jobby.Services.JobTracking.Models;
 
 namespace Jobby.Controllers
 {
@@ -26,8 +27,8 @@ namespace Jobby.Controllers
         }
 
         [HttpGet]
-        [Route("GetJobsWithInstance")]
-        public async Task<ActionResult<GetJobsWithInstanceResponse>> GetJobsWithInstanceAsync()
+        [Route("GetJobsWithLastInstance")]
+        public async Task<ActionResult<GetJobsWithLastInstanceResponse>> GetJobsWithLastInstanceAsync()
         {
             Expression<Func<Job, JobInstance, JobWithInstance>> transformToViewModel = (job, jobInstance) =>
                 new JobWithInstance
@@ -36,11 +37,13 @@ namespace Jobby.Controllers
                     Description = job.Description,
                     Cron = job.Cron,
                     Email = job.Email,
-                    LastRunStatus = jobInstance.Status.ToString()
+                    RunDateTime = job.RunDateTime,
+                    Type = job.Type,
+                    LastRunStatus = jobInstance.Status
                 };
 
             var jobsWithInstance = await jobTrackingService.GetJobsWithLastInstanceAsync(transformToViewModel);
-            var result = new GetJobsWithInstanceResponse { JobsWithInstance = jobsWithInstance };
+            var result = new GetJobsWithLastInstanceResponse { JobsWithInstance = jobsWithInstance };
 
             return result;
         }
@@ -60,11 +63,12 @@ namespace Jobby.Controllers
         }
 
         [HttpPost]
-        [Route("CreateRecurrentJob")]
-        public async Task<ActionResult<CreateJobResponse>> CreateRecurrentJobAsync([FromBody] CreateJobRequest createJobRequest)
+        [Route("CreateRecurringJob")]
+        public async Task<ActionResult<CreateJobResponse>> CreateRecurringJobAsync(
+            [FromBody] CreateRecurringJobRequest createJobRequest)
         {
-            var job = mapper.Map<Job>(createJobRequest); //map to app models
-            string jobId = await jobService.CreateRecurrentJobAsync(job);
+            var job = mapper.Map<CreateRecurringJobAppModel>(createJobRequest);
+            string jobId = await jobService.CreateRecurringJobAsync(job);
 
             var response = new CreateJobResponse() { JobId = jobId };
 
@@ -73,9 +77,10 @@ namespace Jobby.Controllers
 
         [HttpPost]
         [Route("CreateRunOnceJob")]
-        public async Task<ActionResult<CreateJobResponse>> CreateRunOnceJobAsync([FromBody] CreateJobRequest createJobRequest)
+        public async Task<ActionResult<CreateJobResponse>> CreateRunOnceJobAsync(
+            [FromBody] CreateRunOnceJobRequest createJobRequest)
         {
-            var job = mapper.Map<Job>(createJobRequest); //map to app models
+            var job = mapper.Map<CreateRunOnceJobAppModel>(createJobRequest);
             string jobId = await jobService.CreateRunOnceJobAsync(job);
 
             var response = new CreateJobResponse() { JobId = jobId };
