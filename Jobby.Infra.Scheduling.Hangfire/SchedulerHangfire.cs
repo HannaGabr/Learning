@@ -3,7 +3,7 @@ using Hangfire;
 using System;
 using System.Linq.Expressions;
 
-namespace Jobby.Infra.Scheduling.HangF
+namespace Jobby.Infra.Scheduling
 {
     public class SchedulerHangfire : IScheduler
     {

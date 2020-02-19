@@ -1,5 +1,7 @@
 ﻿using Jobby.Infra.Persistence.EF;
-using Jobby.Infra.Scheduling.HangF;
+using Jobby.Infra.Scheduling;
+using Jobby.Services.Scheduler.Interfaces;
+using Jobby.Infra.CronTool;
 using Jobby.Repository.Interfaces;
 using Jobby.Services;
 using Jobby.Services.Interfaces;
@@ -88,6 +90,8 @@ namespace Jobby
         {
             services.AddTransient<IJobService, JobService>();
             services.AddTransient<IJobTrackingService, JobTrackingService>();
+
+            services.AddTransient<ICronHelper, NCronTabHangFHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

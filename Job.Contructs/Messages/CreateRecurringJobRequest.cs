@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Jobby.Services.Scheduler.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Jobby.Contracts.Messages
 {
@@ -7,6 +11,14 @@ namespace Jobby.Contracts.Messages
         public string Description { get; set; }
         [EmailAddress]
         public string Email { get; set; }
-        public string Cron { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Occurrence Occurrence { get; set; }
+        public int DayOfMonth { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public DayOfWeek DayOfWeek { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public Month Month { get; set; }
+        public int Hour { get; set; }
+        public int Minute { get; set; }
     }
 }

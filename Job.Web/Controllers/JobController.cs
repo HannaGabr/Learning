@@ -2,12 +2,14 @@
 using Jobby.Domain.Models;
 using Jobby.Contracts.Messages;
 using Jobby.Contracts.Models;
+using Jobby.Services.JobTracking.Models;
+using Jobby.Services.Scheduler.Interfaces;
 using System.Linq.Expressions;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using Jobby.Services.JobTracking.Models;
+using Jobby.Services.Scheduler.Models;
 
 namespace Jobby.Controllers
 {
@@ -18,12 +20,14 @@ namespace Jobby.Controllers
         private readonly IJobService jobService;
         private readonly IJobTrackingService jobTrackingService;
         private readonly IMapper mapper;
+        private readonly ICronHelper cronHelper;
  
-        public JobController(IJobService jobService, IJobTrackingService jobTrackingService, IMapper mapper)
+        public JobController(IJobService jobService, IJobTrackingService jobTrackingService, IMapper mapper, ICronHelper cronHelper)
         {
             this.jobService = jobService;
             this.jobTrackingService = jobTrackingService;
             this.mapper = mapper;
+            this.cronHelper = cronHelper;
         }
 
         [HttpGet]
@@ -68,6 +72,9 @@ namespace Jobby.Controllers
             [FromBody] CreateRecurringJobRequest createJobRequest)
         {
             var job = mapper.Map<CreateRecurringJobAppModel>(createJobRequest);
+            var schedule = mapper.Map<Schedule>(createJobRequest);
+            var cron = cronHelper.GetCron(schedule);
+            job.Cron = cron;
             string jobId = await jobService.CreateRecurringJobAsync(job);
 
             var response = new CreateJobResponse() { JobId = jobId };

@@ -2,6 +2,7 @@
 using Jobby.Domain.Models;
 using AutoMapper;
 using Jobby.Services.JobTracking.Models;
+using Jobby.Services.Scheduler.Models;
 
 namespace Jobby.Mapping.Profiles
 {
@@ -11,6 +12,7 @@ namespace Jobby.Mapping.Profiles
         {
             CreateMap<CreateRunOnceJobRequest, CreateRunOnceJobAppModel>();
             CreateMap<CreateRecurringJobRequest, CreateRecurringJobAppModel>();
+            CreateMap<CreateRecurringJobRequest, Schedule>();
             CreateMap<Job, GetJobByIdResponse>();
         }
     }

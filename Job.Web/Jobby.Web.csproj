@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Cron\Jobby.Infra.CronTool.NCronTabHelper\Jobby.Infra.CronTool.NCronTHangF.csproj" />
     <ProjectReference Include="..\Job.Contructs\Jobby.Contracts.csproj" />
     <ProjectReference Include="..\Jobby.Infra.Scheduling.Hangfire\Jobby.Infra.Scheduling.HangF.csproj" />
     <ProjectReference Include="..\Job\Jobby.csproj" />
