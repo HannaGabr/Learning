@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Jobby.Domain.Models;
+﻿using Jobby.Domain.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Jobby.Infra.Persistence.EF
 {

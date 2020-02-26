@@ -6,10 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="Hangfire.Core" Version="1.7.9" />
+    <PackageReference Include="ncrontab.signed" Version="3.3.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Job\Jobby.csproj" />
+    <ProjectReference Include="..\..\..\Contracts\Jobby.Contracts.csproj" />
+    <ProjectReference Include="..\..\..\App\Jobby.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Job.Domain\Jobby.Domain.csproj" />
-    <ProjectReference Include="..\Job\Jobby.csproj" />
+    <ProjectReference Include="..\Domain\Jobby.Domain.csproj" />
+    <ProjectReference Include="..\App\Jobby.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,12 +1,12 @@
-﻿using Jobby.Infra.Persistence.EF;
-using Jobby.Infra.Scheduling;
-using Jobby.Services.Scheduler.Interfaces;
-using Jobby.Infra.CronTool;
+﻿using Jobby.Services.Scheduler.Interfaces;
 using Jobby.Repository.Interfaces;
 using Jobby.Services;
 using Jobby.Services.Interfaces;
 using JobAppProfile = Jobby.Services.JobTracking.Mapping.Profiles.JobProfile;
 using JobViewProfile = Jobby.Mapping.Profiles.JobProfile;
+using Jobby.Infra.Scheduling;
+using Jobby.Infra.Persistence.EF;
+using Jobby.Infra.CronTool;
 using AutoMapper;
 using Serilog;
 using Hangfire;
@@ -14,9 +14,9 @@ using Hangfire.MemoryStorage;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace Jobby
 {

@@ -4,12 +4,12 @@ using Jobby.Contracts.Messages;
 using Jobby.Contracts.Models;
 using Jobby.Services.JobTracking.Models;
 using Jobby.Services.Scheduler.Interfaces;
+using Jobby.Services.Scheduler.Models;
+using AutoMapper;
 using System.Linq.Expressions;
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using Jobby.Services.Scheduler.Models;
 
 namespace Jobby.Controllers
 {
